@@ -1,0 +1,111 @@
+<!-- <div class="main-content"> -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h4 class="card-title">Download Scope Document Template</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <mat-form-field>
+                                    <mat-label>Select template to download ...</mat-label>
+                                    <mat-select [(value)]="selectedTemplateArray" multiple required>
+                                        <mat-optgroup label="Cable Management Document">
+                                            <mat-option *ngFor="let cableDocument of cableDocumentArray"
+                                                value={{cableDocument.name}}>{{cableDocument.shortName}}</mat-option>
+                                        </mat-optgroup>
+                                        <mat-optgroup label="Material Management Document">
+                                            <mat-option *ngFor="let materialDocument of materialDocumentArray"
+                                                value={{materialDocument.name}}>{{materialDocument.shortName}}
+                                            </mat-option>
+                                        </mat-optgroup>
+                                        <mat-optgroup label="Electrical Management Document">
+                                            <mat-option *ngFor="let electricalDument of electricalDumentArray"
+                                                value={{electricalDument.name}}>{{electricalDument.shortName}}
+                                            </mat-option>
+                                        </mat-optgroup>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8" *ngFor="let selectedTemplate of selectedTemplateArray">
+                                <ul>{{selectedTemplate}}</ul>
+                            </div>
+                        </div>
+                        <button mat-raised-button (click)="onDownload()" class="btn btn-info pull-right"
+                            [disabled]="!shouldEnableDownloadButton()">Download</button>
+                        <div class="clearfix"></div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h4 class="card-title">Upload Scope Document</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                    <mat-form-field>
+                                        <mat-label>Select Project</mat-label>
+                                        <mat-select [(ngModel)]= "selectedUserProject" required>
+                                          <mat-option *ngFor="let project of userProjects" [value]="project">
+                                              {{project.projectTitle}} - {{project.workOrderNumber}}
+                                              </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                
+                            </div>
+
+                            <div class="col-md-4">
+                                <mat-form-field >
+                                    <mat-label>Select Document Type</mat-label>
+                                    <mat-select [(value)]="selectedDocumentType" required>
+                                        <mat-option value="1">Cable management</mat-option>
+                                        <mat-option value="2">Electrical management</mat-option>
+                                        <mat-option value="3">Material management</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div id="fileSelector" class="col-md-4">
+                                <input style="display: none" type="file" name="fileUplaod" id="fileUpload" multiple
+                                    ng2FileSelect [uploader]="uploader" #hiddenfileinput>
+                                <button mat-raised-button class="btn btn-info pull-left"
+                                    (click)="hiddenfileinput.click()"  [disabled]="!shouldEnableUploadButton()">Select File/s to upload</button>
+    
+                            </div>
+                        </div>
+
+                        <div class="row uploadList" *ngFor="let item of uploader.queue">
+                            <div class="col-md-4">{{item.file.name}}</div>
+                            <div class="col-md-4">
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" [ngStyle]="{'width':item.progress+'%'}"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-dark" (click)="item.upload()">Upload</button>
+                                <button type="button" class="btn btn-danger" (click)="item.remove()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="uploader?.queue?.length > 1">
+                            <button mat-raised-button class="btn btn-info pull-right"
+                                (click)="uploader.uploadAll()">Upload All</button>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+<!-- </div> -->

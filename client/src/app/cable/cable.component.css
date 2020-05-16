@@ -1,0 +1,23 @@
+table {
+    /* width: 100%; */
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    
+    /* min-width: 500px; */
+  }
+  
+  th.mat-header-cell {
+    text-align: center;
+    /* max-width: 300px; */
+  }
+
+  td.mat-cell {
+    text-align: center;
+    align-items: center;
+    /* max-width: 300px; */
+  }
+
+  th.mat-sort-header-sorted {
+      color: black;
+    }

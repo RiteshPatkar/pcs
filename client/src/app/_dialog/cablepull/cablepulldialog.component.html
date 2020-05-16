@@ -1,0 +1,53 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+
+            <div class="row">
+              <div class="col-md-6">
+
+              </div>
+  
+              <div class="card-body">
+                <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-md-4">
+                          <mat-form-field class="example-full-width">
+                              <input matInput placeholder="Drum Number" formControlName="drumNumber">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field class="example-full-width">
+                              <input matInput placeholder="Start Length"  formControlName="startLength"> 
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field class="example-full-width">
+                              <input matInput placeholder="End Length" formControlName="endLength">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Technician"  formControlName="technicianName">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-5">
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="Date" type="datetime" formControlName="date">
+                          </mat-form-field>
+                        </div>
+                    </div>
+                    <button mat-raised-button type="cancel" class="btn btn-danger pull-right" (click)="onCancel()">Cancel</button>
+                    <button mat-raised-button type="submit" class="btn btn-danger pull-right">Pull</button>
+                    <div class="clearfix"></div>
+                </form>
+            
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

@@ -1,0 +1,58 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+
+            <div class="row">
+              <div class="col-md-6">
+
+              </div>
+  
+              <div class="card-body">
+                <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-md-4">
+                          <mat-form-field class="example-full-width">
+                              <input matInput placeholder="From Side" formControlName="fromSide">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field class="example-full-width">
+                              <input matInput placeholder="To Side"  formControlName="toSide"> 
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                            <mat-form-field class="example-full-width">
+                              <input matInput placeholder="From Technician" formControlName="glandFromTechnician">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="To Technician"  formControlName="glandToTechnician">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="From Date" type="datetime" formControlName="glandFromDate">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-4">
+                          <mat-form-field class="example-full-width">
+                            <input matInput placeholder="To Date" type="datetime" formControlName="glandToDate">
+                          </mat-form-field>
+                        </div>
+                    </div>
+                    <button mat-raised-button type="cancel" class="btn btn-danger pull-right" (click)="onCancel()">Cancel</button>
+                    <button mat-raised-button type="submit" class="btn btn-danger pull-right">Gland</button>
+                    <div class="clearfix"></div>
+                </form>
+            
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>

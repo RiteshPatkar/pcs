@@ -1,0 +1,483 @@
+<!-- <div class="main-content"> -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-info">
+            <h4 class="card-title">Material Management</h4>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Select Project/s</mat-label>
+                <mat-select [(ngModel)]="selectedUserProject" (selectionChange)="populateMaterialForSelectedProject()"
+                  required>
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let project of userProjects" [value]="project">
+                    {{project.projectTitle}} - {{project.workOrderNumber}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="card-body">
+
+              <div fxLayout fxLayoutAlign="center center">
+                <mat-form-field fxFlex="40%">
+                  <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+              </div>
+
+              <div class="table-responsive">
+
+                <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+                  <ng-container matColumnDef="Check">
+                    <th mat-header-cell *matHeaderCellDef>Select</th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-checkbox [(ngModel)]="element.checked" [checked]="element.checked"
+                        (click)="onMaterialSelect(element)"></mat-checkbox>
+                    </td>
+                  </ng-container>
+
+                  <!-- <ng-container matColumnDef="Project Id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Project Id</th>
+                    <td mat-cell *matCellDef="let element">{{element.projectId}}</td>
+                  </ng-container> -->
+
+                  <ng-container matColumnDef="Discipline">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Discipline</th>
+                    <td mat-cell *matCellDef="let element">{{element.disciplineCode}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Type/Category">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Type/Category</th>
+                    <td mat-cell *matCellDef="let element">{{element.typeOrCategoryCode}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="PO Number">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>PO Number</th>
+                    <td mat-cell *matCellDef="let element">{{element.itemPoNumber}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Descripition">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripition</th>
+                    <td mat-cell *matCellDef="let element">{{element.description}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Make">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Make</th>
+                    <td mat-cell *matCellDef="let element">{{element.make}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Model">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Model</th>
+                    <td mat-cell *matCellDef="let element">{{element.model}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Received Quantity">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Received Quantity</th>
+                    <td mat-cell *matCellDef="let element">{{element.receivedQuantity}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Spare Quantity">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Spare Quantity</th>
+                    <td mat-cell *matCellDef="let element">{{element.spareQuantity}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Total Quantity">
+                    <th mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Total Quantity</th>
+                    <td mat-cell *matCellDef="let element">{{element.totalQuantity}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="UOM">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>UOM</th>
+                    <td mat-cell *matCellDef="let element">{{element.uomCode}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Courier Number">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Courier Number</th>
+                    <td mat-cell *matCellDef="let element">{{element.courierNumber}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Gate Pass Number">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Gate Pass Number</th>
+                    <td mat-cell *matCellDef="let element">{{element.gatePassNumber}}</td>
+                  </ng-container>
+
+
+                  <ng-container matColumnDef="Receive Date">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Receive Date</th>
+                    <td mat-cell *matCellDef="let element">{{element.receiveDate}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Remark">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Remark</th>
+                    <td mat-cell *matCellDef="let element">{{element.remark}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Details">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Details </th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-icon-button color="primary" (click)="redirectToDetails(element.id)">
+                        <mat-icon class="mat-18">reorder</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedMaterialColumns"></tr>
+
+                  <tr mat-row *matRowDef="let row; columns: displayedMaterialColumns"></tr>
+
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+
+              </div>
+              <button type="button" mat-raised-button (click)="onClickIssue()" [disabled]="!materialSelectedFlag">
+                <mat-icon>card_giftcard</mat-icon>
+                Issue Material
+              </button>
+              &nbsp;
+              <button type="button" mat-raised-button (click)="onClickReturn()" [disabled]="!materialSelectedFlag">
+                <mat-icon>remove_shopping_cart</mat-icon>
+                Return Material
+              </button>
+              &nbsp;
+              <button type="button" mat-raised-button (click)="onClickRequest()" [disabled]="!materialSelectedFlag">
+                <mat-icon>shopping_cart</mat-icon>
+                Request Material
+              </button>
+              &nbsp;
+              <button type="button" mat-raised-button (click)="onClickCancel()">
+                <mat-icon>remove_circle</mat-icon>
+                cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--ISSUE MATERIAL With Form -->
+      <div class="col-md-12" *ngIf=isStateIssueMaterial()>
+        <div class="card">
+          <div class="card-header card-header-info">
+            <h4 class="card-title">Issue Material from Store or Warehouse</h4>
+          </div>
+          <div class="card-body">
+
+            <form [formGroup]="issueMaterialFormGroup" (ngSubmit)="onSubmitIssue()">
+              <div formArrayName="materialsSelectedForIssue">
+
+                <div *ngFor="let materialSelectedForIssue of materialsSelectedForIssue.controls; let i=index"
+                  [formGroupName]="i">
+
+                  <div class="row">
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="PO Number" formControlName="itemPoNumber">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="make" formControlName="make">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="model" formControlName="model">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Quantity To Issue" formControlName="issuedQuantity">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Quantity Remining" formControlName="availableQuantity">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>Unit Of Measure</mat-label>
+                        <mat-select formControlName="uomCode" required>
+                          <mat-option *ngFor="let uom of uomArray" [value]="uom.code">
+                            {{uom.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Issue reason" formControlName="issueReason">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Item Requester" formControlName="requester" required>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Material Receiver Name" formControlName="materialReceiverName">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Item Colelcted By" formControlName="itemCollectedBy">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-8">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Issuer Remark" formControlName="issuerRemark">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="myDatePicker" formControlName="issueDate"
+                          placeholder="Date of Issue">
+                        <mat-datepicker-toggle matSuffix [for]="myDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker #myDatePicker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <button mat-raised-button (click)="onCancel()" class="btn btn-info pull-right">Cancel</button>
+                  <button mat-raised-button type="submit" class="btn btn-info pull-right">Issue</button>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!--RETURN MATERIAL -->
+      <div class="col-md-12" *ngIf=isStateReturnMaterial()>
+        <div class="card">
+          <div class="card-header card-header-info">
+            <h4 class="card-title">Return Material to Store or Warehouse</h4>
+          </div>
+          <div class="card-body">
+
+            <form [formGroup]="returnMaterialFormGroup" (ngSubmit)="onSubmitReturn()">
+              <div formArrayName="materialsSelectedForReturn">
+
+                <div *ngFor="let materialSelectedForReturn of materialsSelectedForReturn.controls; let i=index"
+                  [formGroupName]="i">
+
+                  <div class="row">
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="PO Number" formControlName="itemPoNumber">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="make" formControlName="make">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="model" formControlName="model">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Return Issuer Number" formControlName="returnIssueNumber">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Return Quantity" formControlName="returnQuantity">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>Unit Of Measure</mat-label>
+                        <mat-select formControlName="uomCode" required>
+                          <mat-option *ngFor="let uom of uomArray" [value]="uom.code">
+                            {{uom.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-4">
+                        <mat-form-field class="example-full-width">
+                          <input matInput placeholder="Return By" formControlName="returnBy" required>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-4">
+                        <mat-form-field class="example-full-width">
+                          <input matInput placeholder="Return Accepted By" formControlName="returnAcceptedBy">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-8">
+                        <mat-form-field class="example-full-width">
+                          <input matInput placeholder="Return Remark" formControlName="returnRemark">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-3">
+                        <mat-form-field>
+                          <input matInput [matDatepicker]="myDatePicker" formControlName="returnDate"
+                            placeholder="Date of Return">
+                          <mat-datepicker-toggle matSuffix [for]="myDatePicker"></mat-datepicker-toggle>
+                          <mat-datepicker #myDatePicker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <button mat-raised-button (click)="onCancel()" class="btn btn-info pull-right">Cancel</button>
+                    <button mat-raised-button type="submit" class="btn btn-info pull-right">Issue</button>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <!--REQUEST MATERIAL -->
+      <div class="col-md-12" *ngIf=isStateRequestMaterial()>
+        <div class="card">
+          <div class="card-header card-header-info">
+            <h4 class="card-title">Request Material to Store or Warehouse</h4>
+          </div>
+          <div class="card-body">
+
+            <form [formGroup]="requestMaterialFormGroup" (ngSubmit)="onSubmitRequest()">
+              <div formArrayName="materialsSelectedForRequest">
+
+                <div *ngFor="let materialSelectedForRequest of materialsSelectedForRequest.controls; let i=index"
+                  [formGroupName]="i">
+
+                  <div class="row">
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Description" formControlName="requestDescription">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Quantity" formControlName="requestQuantity">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Reason" formControlName="requestReason">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Document Reference" formControlName="requestDocumentReference">
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Affect" formControlName="requestAffect">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Delivery By" formControlName="requestDeliverBy">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Originator" formControlName="requestOriginator">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>Unit Of Measure</mat-label>
+                        <mat-select formControlName="uomCode" required>
+                          <mat-option *ngFor="let uom of uomArray" [value]="uom.code">
+                            {{uom.name}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Deliver To" formControlName="requestDeliverTo" required>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Discipline" formControlName="requestDiscipline">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-8">
+                      <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Request Type" formControlName="requestType">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="myDatePicker" formControlName="requestDate"
+                          placeholder="Date of Request">
+                        <mat-datepicker-toggle matSuffix [for]="myDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker #myDatePicker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <button mat-raised-button (click)="onCancel()" class="btn btn-info pull-right">Cancel</button>
+                  <button mat-raised-button type="submit" class="btn btn-info pull-right">Issue</button>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+<!-- </div> -->

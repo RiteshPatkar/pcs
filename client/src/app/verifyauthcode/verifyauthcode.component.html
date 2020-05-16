@@ -1,0 +1,31 @@
+﻿<mat-card>
+  <mat-card-title>Verify Code Sent in Email</mat-card-title>
+  <mat-card-content>
+
+    <form [formGroup]="authCodeForm" (ngSubmit)="onVerify()">
+      <div class='flexcontainer'>
+        <mat-form-field>
+          <input matInput placeholder="Enter 6 digit Auth Code" formControlName="authCode" required maxlength="6">
+          <mat-error *ngIf="f.authCode.errors?.required">
+            Code is required.
+          </mat-error> 
+        </mat-form-field>
+
+      </div>
+
+      <div class="button">
+        <button [disabled]="loading" type="submit" mat-raised-button color='primary'>Verify</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <div class="button">
+          <button mat-raised-button color='primary' tooltip="Resend code" onClick="onResend()">Resend</button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          <a [routerLink]="['/login']" class="btn btn-link">Cancel</a>
+        </div>
+        </div>
+
+    </form>
+  </mat-card-content>
+
+</mat-card>

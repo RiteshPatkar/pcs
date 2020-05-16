@@ -1,0 +1,24 @@
+const sqlite3 = require('sqlite3').verbose();
+
+const SqlLite = () => {
+
+};
+
+SqlLite.dbConnection = new sqlite3.Database(':memory', (err) => {
+    
+    SqlLite.dbConnection.run('CREATE TABLE AUTH_CODE (EMAIL CODE EXPIRE_TIME)');
+
+    if(err){
+        console.log(err.message);
+    }
+    console.log('Connected to DB !!');
+
+    // dbConnection.close((err) => {
+    //     if(err) {
+    //         console.log(err.message);
+    //     }
+    //     console.log('DB Closed !!');
+    // });
+});
+
+module.export = SqlLite;

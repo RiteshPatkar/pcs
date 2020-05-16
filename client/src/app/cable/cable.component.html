@@ -1,0 +1,159 @@
+<!-- <div class="main-content"> -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-info">
+              <h4 class="card-title">Cable Management</h4>
+            </div>
+
+          <div class="card-body">
+
+            <div class="row">
+
+              <div class="col-md-5">
+                <mat-form-field>
+                  <mat-icon></mat-icon>
+                  <mat-label>Select Project/s</mat-label>
+                  <mat-select [(ngModel)]="selectedUserProject" (selectionChange)="populateCableForSelectedProject()"
+                    required>
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let project of userProjects" [value]="project">
+                      {{project.projectTitle}} - {{project.workOrderNumber}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+              </div>
+
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-icon>search</mat-icon>
+                  <input matInput type="text" (keyup)="doFilter($event.target.value)">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- <div fxLayout class="col-md-6">
+                  <mat-form-field fxFlex="40%">
+                    <mat-icon>search</mat-icon>
+                    <input matInput type="text" (keyup)="doFilter($event.target.value)">
+                  </mat-form-field>
+                </div> -->
+
+              <div class="table-responsive col-md-12">
+
+                <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z20 horizontal-align:center">
+
+                  <!-- <ng-container matColumnDef="Check">
+                      <th mat-header-cell *matHeaderCellDef>Select</th>
+                      <td mat-cell *matCellDef="let element">
+                        <mat-checkbox [(ngModel)]="element.checked" [checked]="element.checked"
+                          (click)="onCableSelect(element)"></mat-checkbox>
+                      </td>
+                    </ng-container> -->
+
+                  <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+                    <!-- <td mat-cell *matCellDef="let element">Pull -> Gland -> Terminate</td> -->
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-mini-fab matTooltip="Pull Cable" (click)="onCablePull(element)"
+                        [disabled]="element.isPulled">
+                        <mat-icon>shutter_speed </mat-icon>
+                      </button> &nbsp;
+                      <button mat-mini-fab matTooltip="Gland Cable" (click)="onCableGland(element)"
+                        [disabled]="!element.isPulled || element.isGlanded">
+                        <mat-icon>vibration</mat-icon>
+                      </button> &nbsp;
+                      <button mat-mini-fab matTooltip="Terminate Cable" (click)="onCableTerminate(element)"
+                        [disabled]="!element.isGlanded || element.isTerminated">
+                        <mat-icon>close</mat-icon>
+                      </button> &nbsp;
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Discipline">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Discipline</th>
+                    <td mat-cell *matCellDef="let element">{{element.disciplineCode}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Area">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Area</th>
+                    <td mat-cell *matCellDef="let element">{{element.area}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Service">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Service</th>
+                    <td mat-cell *matCellDef="let element">{{element.service}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Location From">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Location From</th>
+                    <td mat-cell *matCellDef="let element">{{element.locationFrom}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Location To">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Location To</th>
+                    <td mat-cell *matCellDef="let element">{{element.locationTo}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Tag From">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tag From</th>
+                    <td mat-cell *matCellDef="let element">{{element.tagFrom}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Tag To">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tag To</th>
+                    <td mat-cell *matCellDef="let element">{{element.tagTo}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Size">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
+                    <td mat-cell *matCellDef="let element">{{element.size}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Type">
+                    <th mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+                    <td mat-cell *matCellDef="let element">{{element.type}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Length">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Length</th>
+                    <td mat-cell *matCellDef="let element">{{element.length}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Tag">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Tag</th>
+                    <td mat-cell *matCellDef="let element">{{element.tagNumber}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Details">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Details</th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-icon-button color="primary" (click)="redirectToDetails(element.id)">
+                        <mat-icon class="mat-18">reorder</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedCableColumns"></tr>
+
+                  <tr mat-row *matRowDef="let row; columns: displayedCableColumns"></tr>
+                </table>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+
+            </div>
+            <button type="button" mat-raised-button (click)="resetCableStatus()">
+              RESET FOR TEST
+            </button>
+            &nbsp;
+          </div>
+        </div>
+      </div>
+    <!-- </div> -->
